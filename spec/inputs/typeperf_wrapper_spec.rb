@@ -121,7 +121,7 @@ describe 'IntegrationTests' do
 	
 	describe 'add_counter' do
 	  it 'raises error when counter is not found' do
-	    expect { wrapper.add_counter('\\Nada(_total)\\% DoesntExist') }.to raise_error 'Perfmon counter could not be found.'
+	    expect { wrapper.add_counter('\\Nada(_total)\\% DoesntExist') }.to raise_error "Perfmon counter '\\Nada(_total)\\% DoesntExist' could not be found."
 	  end
 	end
   end

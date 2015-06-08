@@ -19,7 +19,7 @@ class TypeperfWrapper
   # Adds a counter to the list of counters watched
   # [counter_name] The path to the counter, such as "\\processor(_total)\\% processor time"
   def add_counter(counter_name)
-    raise 'Perfmon counter could not be found.' unless @perfmon_proc_getter.counter_exists?(counter_name)
+    raise "Perfmon counter '#{counter_name}' could not be found." unless @perfmon_proc_getter.counter_exists?(counter_name)
     @counters << counter_name.downcase
   end
   
