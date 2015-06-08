@@ -1,4 +1,4 @@
-# Logstash Plugin
+# Perfmon Logstash Plugin
 
 This is a plugin for [Logstash](https://github.com/elasticsearch/logstash).
 
@@ -6,81 +6,82 @@ It is fully free and fully open source. The license is Apache 2.0, meaning you a
 
 ## Documentation
 
-Logstash provides infrastructure to automatically generate documentation for this plugin. We use the asciidoc format to write documentation so any comments in the source code will be first converted into asciidoc and then into html. All plugin documentation are placed under one [central location](http://www.elasticsearch.org/guide/en/logstash/current/).
+On Windows, performance metrics can be collected using [Windows Performance Monitor](https://technet.microsoft.com/en-us/library/cc749249.aspx).
+This plugin collects the same sort of counters by using the command-line tool [Typeperf](https://technet.microsoft.com/en-us/library/bb490960.aspx).
 
-- For formatting code or config example, you can use the asciidoc `[source,ruby]` directive
-- For more asciidoc formatting tips, see the excellent reference here https://github.com/elasticsearch/docs#asciidoc-guide
-
-## Need Help?
-
-Need help? Try #logstash on freenode IRC or the https://discuss.elastic.co/c/logstash discussion forum.
-
-## Developing
-
-### 1. Plugin Developement and Testing
-
-#### Code
-- To get started, you'll need JRuby with the Bundler gem installed.
-
-- Create a new plugin or clone and existing from the GitHub [logstash-plugins](https://github.com/logstash-plugins) organization. We also provide [example plugins](https://github.com/logstash-plugins?query=example).
-
-- Install dependencies
-```sh
-bundle install
+To run the tests (be sure that JRuby is installed prior):
+```
+git clone https://github.com/NickMRamirez/logstash-input-perfmon.git
+cd logstash-input-perfmon
+jruby -S gem install bundler
+jruby -S bundle install
+jruby -S bundle exec rspec spec
 ```
 
-#### Test
-
-- Update your dependencies
-
-```sh
-bundle install
+To build the gem:
+```
+gem build logstash-input-perfmon.gemspec
 ```
 
-- Run tests
-
-```sh
-bundle exec rspec
+To install the gem to logstash:
 ```
-
-### 2. Running your unpublished Plugin in Logstash
-
-#### 2.1 Run in a local Logstash clone
-
-- Edit Logstash `Gemfile` and add the local plugin path, for example:
+cd path\to\logstash\bin
+plugin install path\to\gem
+```
+	
+Create a configuration file. The following collects three metrics every ten seconds:
 ```ruby
-gem "logstash-filter-awesome", :path => "/your/local/logstash-filter-awesome"
+input {
+  perfmon {
+	interval => 10 
+	  counters => [
+		"\Processor(_Total)\% Privileged Time",
+		"\Processor(_Total)\% Processor Time", 
+		"\Processor(_Total)\% User Time"]
+  }
+}
+
+filter {
+  grok {
+	match => {
+	  "message" => "%{DATESTAMP:Occurred},%{NUMBER:PrivilegedTime:float},%{NUMBER:ProcessorTime:float},%{NUMBER:UserTime:float}"
+	}
+  }
+}
+
+output {
+  file {
+	path => "C:\perfmon_output.txt"
+  }
+}
 ```
-- Install plugin
-```sh
-bin/plugin install --no-verify
+Run logstash:
 ```
-- Run Logstash with your plugin
-```sh
-bin/logstash -e 'filter {awesome {}}'
+logstash -f C:\path\to\conf
 ```
-At this point any modifications to the plugin code will be applied to this local Logstash setup. After modifying the plugin, simply rerun Logstash.
 
-#### 2.2 Run in an installed Logstash
-
-You can use the same **2.1** method to run your plugin in an installed Logstash by editing its `Gemfile` and pointing the `:path` to your local plugin development directory or you can build the gem and install it using:
-
-- Build your plugin gem
-```sh
-gem build logstash-filter-awesome.gemspec
+This configuration will produce output like:
+```json
+{
+  "message":"06/05/2015 15:40:46.999,0.781236,7.032877,6.249891",
+  "@version":"1",
+  "@timestamp":"2015-06-05T19:40:48.468Z",
+  "host":"Webserver1",
+  "Occurred":"06/05/2015 15:40:46.999",
+  "PrivilegedTime":0.781236,
+  "ProcessorTime":7.032877,
+  "UserTime":6.249891
+}
 ```
-- Install the plugin from the Logstash home
-```sh
-bin/plugin install /your/local/plugin/logstash-filter-awesome.gem
+
+## Troubleshooting
+
+If you get bundler errors having to do with not being able to install a gem, such as:
 ```
-- Start Logstash and proceed to test the plugin
-
-## Contributing
-
-All contributions are welcome: ideas, patches, documentation, bug reports, complaints, and even something you drew up on a napkin.
-
-Programming is not a required skill. Whatever you've seen about open source and maintainers or community members  saying "send patches or die" - you will not see that here.
-
-It is more important to the community that you are able to contribute.
-
-For more information about contributing, see the [CONTRIBUTING](https://github.com/elasticsearch/logstash/blob/master/CONTRIBUTING.md) file.
+You have requested:
+  logstash-devutil >= 0
+  
+The bundle currently has logstash-devutil locked at 0.0.13.
+Try running 'bundle update logstash-devutils'
+```
+The JRuby -S parameter looks at your PATH and it may be defaulting to another version of Ruby. 
