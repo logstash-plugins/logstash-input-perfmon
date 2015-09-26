@@ -84,11 +84,19 @@ class LogStash::Inputs::Perfmon < LogStash::Inputs::Base
     end
   end 
 
-  # Cleans up any resources
+  # Cleans up any resources, called when Ctrl+C used
   def teardown
+    @logger.debug("Calling teardown on logstash-input-perfmon")
     @typeperf.stop_monitor
     @logger.debug("Stopped the perfmon monitor")
     finished
+  end
+  
+  # Manual way to stop the plugin
+  def stop
+    @logger.debug("Calling stop on logstash-input-perfmon")
+    @typeperf.stop_monitor
+    @logger.debug("Stopped the perfmon monitor")
   end
 
 end

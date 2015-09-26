@@ -64,7 +64,7 @@ describe 'IntegrationTests' do
 		
 		expect(my_queue).not_to be_empty
 		
-		plugin.teardown
+		plugin.stop
 	  end
 	end
 	

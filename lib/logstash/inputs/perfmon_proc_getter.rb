@@ -1,3 +1,5 @@
+require 'open3'
+
 class PerfmonProcGetter
   attr_reader :pid
   
@@ -12,17 +14,19 @@ class PerfmonProcGetter
   # [output_queue] The queue to add each new message to
   def start_process(counters, interval, output_queue)
     cmd = get_typeperf_command(counters, interval)
-	  
-    IO.popen(cmd) do |f|
-      @pid = f.pid
-
-      f.each do |line| 
-        next if counters.any? { |counter| line.include? counter } # don't show lines that contain headers
-        line.gsub!('"', '') # remove quotes
-        line.strip!
-        output_queue << line
+	
+	Open3.popen3(cmd) do |w, r, e, thr|
+      while line = r.gets
+	    if @pid.nil?
+	      @pid = thr.pid
+		end
+      
+	    next if counters.any? { |counter| line.include? counter } # don't show lines that contain headers
+	    line.gsub!('"', '') # remove quotes
+	    line.strip!
+	    output_queue << line
       end
-    end
+	end
   end
   
   # Kills the typeperf process

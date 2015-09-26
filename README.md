@@ -15,7 +15,7 @@ git clone https://github.com/NickMRamirez/logstash-input-perfmon.git
 cd logstash-input-perfmon
 jruby -S gem install bundler
 jruby -S bundle install
-jruby -S bundle exec rspec spec
+jruby -S bundle exec rake
 ```
 
 To build the gem:
