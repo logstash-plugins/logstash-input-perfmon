@@ -1,4 +1,5 @@
 # Perfmon Logstash Plugin
+[![Build Status](https://travis-ci.org/NickMRamirez/logstash-input-perfmon.svg)](https://travis-ci.org/NickMRamirez/logstash-input-perfmon)
 
 This is a plugin for [Logstash](https://github.com/elasticsearch/logstash).
 
