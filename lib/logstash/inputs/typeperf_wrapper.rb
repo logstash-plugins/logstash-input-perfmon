@@ -1,4 +1,3 @@
-require 'win32/process'
 require_relative 'perfmon_proc_getter'
 
 # Wraps the typeperf command-line tool, used to get 
