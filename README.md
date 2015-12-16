@@ -32,7 +32,7 @@ plugin install path\to\gem
 If you aren't building the gem yourself, you can install it directly from rubygems.org:
 ```
 cd path\to\logstash\bin
-plugin install logstah-input-perfmon
+plugin install logstash-input-perfmon
 ```
 	
 Create a configuration file. The following collects three metrics every ten seconds:
