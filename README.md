@@ -28,6 +28,12 @@ To install the gem to logstash:
 cd path\to\logstash\bin
 plugin install path\to\gem
 ```
+
+If you aren't building the gem yourself, you can install it directly from rubygems.org:
+```
+cd path\to\logstash\bin
+plugin install logstah-input-perfmon
+```
 	
 Create a configuration file. The following collects three metrics every ten seconds:
 ```ruby
@@ -85,3 +91,4 @@ The bundle currently has logstash-devutil locked at 0.0.13.
 Try running 'bundle update logstash-devutils'
 ```
 The JRuby -S parameter looks at your PATH and it may be defaulting to another version of Ruby. 
+You can temporarily add the JRuby bin folder to the beginning of your PATH to fix this.

@@ -71,7 +71,7 @@ describe 'UnitTests' do
 		wrapper.start_monitor
 		
 		# Should be seen by get_next
-		sleep 2
+		sleep 10
 		expect(msg).to eq "Test msg 1"
 	  end
 	end
