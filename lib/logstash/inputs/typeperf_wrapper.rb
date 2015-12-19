@@ -41,10 +41,10 @@ class TypeperfWrapper
   
   # Waits until a new message is put onto the queue, then returns it
   def get_next
-    while @msg_queue.empty?
+    while alive? && @msg_queue.empty?
       sleep 0.5 
     end
-	
+    
     @msg_queue.pop
   end
   
@@ -55,7 +55,7 @@ class TypeperfWrapper
     Thread.new do
       @perfmon_proc_getter.start_process(@counters, @interval, @msg_queue)
     end
-	
+    
     @perfmon_proc_getter.wait_for_process_to_start
   end
 end

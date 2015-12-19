@@ -67,7 +67,7 @@ class LogStash::Inputs::Perfmon < LogStash::Inputs::Base
   # [queue] The queue to add new events to
   def run(queue)
     @typeperf.start_monitor
-	
+    
     @logger.debug("Started perfmon monitor")
 
     while @typeperf.alive?
@@ -75,9 +75,9 @@ class LogStash::Inputs::Perfmon < LogStash::Inputs::Base
 
       @codec.decode(data) do |event|
         decorate(event)
-		
+        
         event['host'] = @host
-		
+        
         queue << event
         @logger.debug("Added event to queue: #{event}")
       end

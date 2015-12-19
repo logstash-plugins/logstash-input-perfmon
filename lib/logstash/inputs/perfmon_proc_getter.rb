@@ -14,19 +14,18 @@ class PerfmonProcGetter
   # [output_queue] The queue to add each new message to
   def start_process(counters, interval, output_queue)
     cmd = get_typeperf_command(counters, interval)
-	
-	Open3.popen3(cmd) do |w, r, e, thr|
+    
+    Open3.popen3(cmd) do |w, r, e, thr|
+    
+      wait_for_process_id_to_be_set(thr)
+    
       while line = r.gets
-	    if @pid.nil?
-	      @pid = thr.pid
-		end
-      
-	    next if counters.any? { |counter| line.include? counter } # don't show lines that contain headers
-	    line.gsub!('"', '') # remove quotes
-	    line.strip!
-	    output_queue << line
+        next if counters.any? { |counter| line.include? counter } # don't show lines that contain headers
+        line.gsub!('"', '') # remove quotes
+        line.strip!
+        output_queue << line
       end
-	end
+    end
   end
   
   # Kills the typeperf process
@@ -72,5 +71,14 @@ class PerfmonProcGetter
   # Waits until the typeperf process is running
   def wait_for_process_to_start
     sleep 0.5 until proc_is_running?
+  end
+  
+  # Waits until the PID is set
+  # [thr] The object containing process info like the PID
+  def wait_for_process_id_to_be_set(thr)
+    while @pid.nil?
+      @pid = thr.pid
+      sleep 0.5
+    end
   end
 end
