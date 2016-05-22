@@ -1,5 +1,8 @@
 # Perfmon Logstash Plugin
 
+[![Build
+Status](http://build-eu-00.elastic.co/view/LS%20Plugins/view/LS%20Inputs/job/logstash-plugin-input-perfmon-unit/badge/icon)](http://build-eu-00.elastic.co/view/LS%20Plugins/view/LS%20Inputs/job/logstash-plugin-input-perfmon-unit/)
+
 This is a plugin for [Logstash](https://github.com/elastic/logstash).
 
 It is fully free and fully open source. The license is Apache 2.0, meaning you are pretty much free to use it however you want in whatever way.
@@ -11,7 +14,7 @@ This plugin collects the same sort of counters by using the command-line tool [T
 
 To run the tests (be sure that JRuby is installed prior):
 ```
-git clone https://github.com/NickMRamirez/logstash-input-perfmon.git
+git clone https://github.com/logstash-plugins/logstash-input-perfmon.git
 cd logstash-input-perfmon
 jruby -S gem install bundler
 jruby -S bundle install
@@ -29,10 +32,15 @@ cd path\to\logstash\bin
 plugin install path\to\gem
 ```
 
-If you aren't building the gem yourself, you can install it directly from rubygems.org:
+If you aren't building the gem yourself, you can install it directly from [rubygems.org](https://rubygems.org/gems/logstash-input-perfmon):
 ```
-cd path\to\logstash\bin
-plugin install logstash-input-perfmon
+cd path\to\logstash
+
+# Logstash 2.3 and higher
+bin\logstash-plugin install --no-verify logstash-input-perfmon
+
+# Prior to Logstash 2.3
+bin\plugin install --no-verify logstash-input-perfmon
 ```
 	
 Create a configuration file. The following collects three metrics every ten seconds:
@@ -61,6 +69,7 @@ output {
   }
 }
 ```
+
 Run logstash:
 ```
 logstash -f C:\path\to\conf
