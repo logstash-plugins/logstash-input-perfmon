@@ -1,0 +1,9 @@
+# TODO: Uncomment when Windows OS is supported by Travis CI.
+# We can only run the integration tests on Windows.
+
+# language: ruby
+#rvm:
+#  - jruby-head
+#  
+#os:
+#  - windows
