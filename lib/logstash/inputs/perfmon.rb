@@ -76,7 +76,7 @@ class LogStash::Inputs::Perfmon < LogStash::Inputs::Base
       @codec.decode(data) do |event|
         decorate(event)
         
-        event['host'] = @host
+        event.set('host', @host)
         
         queue << event
         @logger.debug("Added event to queue: #{event}")
