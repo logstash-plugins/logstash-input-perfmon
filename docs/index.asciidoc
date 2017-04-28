@@ -1,0 +1,98 @@
+:plugin: perfmon
+:type: input
+
+///////////////////////////////////////////
+START - GENERATED VARIABLES, DO NOT EDIT!
+///////////////////////////////////////////
+:version: %VERSION%
+:release_date: %RELEASE_DATE%
+:changelog_url: %CHANGELOG_URL%
+:include_path: ../../../logstash/docs/include
+///////////////////////////////////////////
+END - GENERATED VARIABLES, DO NOT EDIT!
+///////////////////////////////////////////
+
+[id="plugins-{type}-{plugin}"]
+
+=== Perfmon
+
+include::{include_path}/plugin_header.asciidoc[]
+
+==== Description
+
+This input will pull metrics from https://technet.microsoft.com/en-us/library/cc749249.aspx[Windows Performance Monitor].
+Under the covers, it uses https://technet.microsoft.com/en-us/library/bb490960.aspx[Typeperf].
+
+To collect performance measurements, use a config like:
+[source,ruby]
+    input {
+      perfmon {
+        interval => 10
+        counters => [
+          "\Processor(_Total)\% Privileged Time",
+          "\Processor(_Total)\% Processor Time", 
+          "\Processor(_Total)\% User Time"]
+      }
+    }
+    filter {
+      grok {
+        match => {
+          "message" => "%{DATESTAMP:Occurred},%{NUMBER:PrivilegedTime:float},%{NUMBER:ProcessorTime:float},%{NUMBER:UserTime:float}"
+      }
+    }
+  }
+
+[id="plugins-{type}s-{plugin}-options"]
+==== Perfmon Input Configuration Options
+
+This plugin supports the following configuration options plus the <<plugins-{type}s-common-options>> described later.
+
+[cols="<,<,<",options="header",]
+|=======================================================================
+|Setting |Input type|Required
+| <<plugins-{type}s-{plugin}-counters>> |<<array,array>>|No
+| <<plugins-{type}s-{plugin}-host>> |<<,>>|No
+| <<plugins-{type}s-{plugin}-interval>> |<<number,number>>|No
+|=======================================================================
+
+Also see <<plugins-{type}s-common-options>> for a list of options supported by all
+input plugins.
+
+&nbsp;
+
+[id="plugins-{type}s-{plugin}-counters"]
+===== `counters` 
+
+  * Value type is <<array,array>>
+  * Default value is `["\\Processor(_Total)\\% Processor Time", "\\Processor Information(_Total)\\% User Time", "\\Process(_Total)\\% Privileged Time"]`
+
+If undefined, Logstash will complain, even if codec is unused.
+Sets which perfmon counters to collect
+
+[id="plugins-{type}s-{plugin}-host"]
+===== `host` 
+
+  * Value type is <<string,string>>
+  * Default value is `"logstash-dev"`
+
+Identifies the server being monitored. Defaults to hostname, but can be overriden.
+[source,ruby]
+    input {
+      perfmon {
+        interval => 10
+        counters => ["\Processor(_Total)\% Privileged Time"],
+        host => "webserver1"
+      }
+    }
+
+[id="plugins-{type}s-{plugin}-interval"]
+===== `interval` 
+
+  * Value type is <<number,number>>
+  * Default value is `10`
+
+Sets the frequency, in seconds, at which to collect perfmon metrics
+
+
+
+include::{include_path}/{type}.asciidoc[]
