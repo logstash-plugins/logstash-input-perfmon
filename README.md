@@ -26,10 +26,10 @@ To build the gem:
 gem build logstash-input-perfmon.gemspec
 ```
 
-To install the gem to logstash:
+To install the gem to logstash (note the forward slashes in the path when using the `install` command):
 ```
 cd path\to\logstash\bin
-plugin install path\to\gem
+logstash-plugin install C:/path/to/gem
 ```
 
 If you aren't building the gem yourself, you can install it directly from [rubygems.org](https://rubygems.org/gems/logstash-input-perfmon):
@@ -64,9 +64,7 @@ filter {
 }
 
 output {
-  file {
-	path => "C:\perfmon_output.txt"
-  }
+  stdout {}
 }
 ```
 

@@ -4,10 +4,14 @@ require_relative '../../lib/logstash/inputs/typeperf_wrapper.rb'
 
 class MockPerfmonProcGetter
   def start_process(counters, interval, output_queue)
-	output_queue << "Test msg 1" 
-	output_queue << "Test msg 2" 
-	output_queue << "Test msg 3" 
+	  output_queue << "Test msg 1" 
+	  output_queue << "Test msg 2" 
+	  output_queue << "Test msg 3" 
   end
+
+	def proc_is_running?
+    true
+	end
   
   def wait_for_process_to_start
     sleep 1
