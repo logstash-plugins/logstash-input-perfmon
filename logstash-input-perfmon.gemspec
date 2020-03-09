@@ -22,5 +22,5 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency 'logstash-core', '~> 2.1'
   s.add_runtime_dependency 'logstash-codec-plain', '~> 2.0'
 
-  s.add_development_dependency 'logstash-devutils', '~> 0'
+  s.add_development_dependency 'logstash-devutils'
 end
