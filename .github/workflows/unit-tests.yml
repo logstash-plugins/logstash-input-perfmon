@@ -16,7 +16,7 @@ on:
 
 jobs:
   tests:
-    if: github.event_name != 'schedule'
+    if: ${{ github.event_name != 'schedule' }}
     uses: logstash-plugins/.ci/.github/workflows/unit-tests.yml@1.x
     secrets: inherit
     concurrency:
@@ -27,7 +27,7 @@ jobs:
       timeout-minutes: 60
 
   scheduled:
-    if: github.event_name == 'schedule'
+    if: ${{ github.event_name == 'schedule' }}
     strategy:
       fail-fast: false
       matrix:
