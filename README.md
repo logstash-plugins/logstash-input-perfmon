@@ -1,7 +1,6 @@
 # Perfmon Logstash Plugin
 
-[![Build
-Status](http://build-eu-00.elastic.co/view/LS%20Plugins/view/LS%20Inputs/job/logstash-plugin-input-perfmon-unit/badge/icon)](http://build-eu-00.elastic.co/view/LS%20Plugins/view/LS%20Inputs/job/logstash-plugin-input-perfmon-unit/)
+[![Unit Tests](https://github.com/logstash-plugins/logstash-input-perfmon/actions/workflows/unit-tests.yml/badge.svg?branch=main)](https://github.com/logstash-plugins/logstash-input-perfmon/actions/workflows/unit-tests.yml)
 
 This is a plugin for [Logstash](https://github.com/elastic/logstash).
 
